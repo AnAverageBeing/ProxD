@@ -9,13 +9,12 @@ package proxy
 *
  */
 
-type ProxyProtocol int
+type ProxyProtocol string
 
 const (
-	HTTP ProxyProtocol = iota
-	HTTPS
-	SOCKS4
-	SOCKS5
+	HTTP   ProxyProtocol = "HTTP"
+	SOCKS4 ProxyProtocol = "SOCKS4"
+	SOCKS5 ProxyProtocol = "SOCKS5"
 )
 
 type Proxy struct {
