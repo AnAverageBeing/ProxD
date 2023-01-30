@@ -23,7 +23,7 @@ type Proxy struct {
 	Protocol ProxyProtocol
 }
 
-type ProxyList struct {
+type UrlsList struct {
 	URLs     []string
 	Protocol ProxyProtocol
 }

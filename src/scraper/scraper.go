@@ -24,11 +24,13 @@ var re = regexp.MustCompile(`\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5}\b`)
 var wg sync.WaitGroup
 var c = colly.NewCollector()
 
-func Scrape(list []proxy.ProxyList, proxies *[]proxy.Proxy) {
-	c.SetRequestTimeout(10 * time.Second)
-	for _, proxyList := range list {
-		wg.Add(1)
-		go scrapeURL(proxyList.URLs, proxyList.Protocol, proxies)
+func Scrape(list *[]proxy.UrlsList, proxies *[]proxy.Proxy, timeout time.Duration) {
+	c.SetRequestTimeout(timeout)
+	for _, proxyList := range *list {
+		if len(proxyList.URLs) > 0 {
+			wg.Add(1)
+			go scrapeURL(proxyList.URLs, proxyList.Protocol, proxies)
+		}
 	}
 	wg.Wait()
 }
