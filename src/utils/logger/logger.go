@@ -1,4 +1,3 @@
-// Package logger provides methods for logging various events in the application.
 package logger
 
 /*
@@ -18,14 +17,12 @@ import (
 	"github.com/jwalton/gchalk"
 )
 
-// Constants representing the different log types.
 const (
 	Working = "WORKING"
 	Info    = "INFO"
 	Error   = "ERROR"
 )
 
-// Variables to store the log type colors.
 var (
 	workingColor = gchalk.Ansi256(46)(Working)
 	infoColor    = gchalk.WithAnsi256(146).Bold(Info)
@@ -35,7 +32,6 @@ var (
 	proxyPrefix  = gchalk.WithAnsi256(171).Bold("PROXY ")
 )
 
-// LogProxy logs information about a proxy.
 func LogProxy(proxy *proxy.Proxy) {
 	str := new(strings.Builder)
 	str.WriteString(encloseInBrackets(workingColor))
@@ -44,7 +40,6 @@ func LogProxy(proxy *proxy.Proxy) {
 	fmt.Println(str.String())
 }
 
-// LogInfo logs an info message.
 func LogInfo(info string) {
 	str := new(strings.Builder)
 	fmt.Print(encloseInBrackets(infoColor))
@@ -53,7 +48,6 @@ func LogInfo(info string) {
 	fmt.Println(str.String())
 }
 
-// LogErr logs an error message.
 func LogErr(err error) {
 	if err != nil {
 		str := new(strings.Builder)
@@ -64,12 +58,10 @@ func LogErr(err error) {
 	}
 }
 
-// encloseInBrackets returns a string enclosed in brackets.
 func encloseInBrackets(str string) string {
 	return lb + str + rb
 }
 
-// formatProxyString returns a string representation of a proxy.
 func formatProxyString(proxy *proxy.Proxy) string {
 	str := new(strings.Builder)
 	str.WriteString(proxyPrefix)
