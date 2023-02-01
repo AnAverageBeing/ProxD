@@ -3,6 +3,7 @@ package checker
 import (
 	"GigaCat/ProxD/proxy"
 	"GigaCat/ProxD/utils"
+	"GigaCat/ProxD/utils/logger"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -70,6 +71,7 @@ func CheckProxy(checkedProxy *[]proxy.Proxy, proxy *proxy.Proxy, timeout time.Du
 		return nil
 	}
 	if fmt.Sprintf("%s:%s", jsonData.Origin, proxyUrl.Port()) == proxyUrl.Host {
+		logger.LogProxy(proxy)
 		utils.Save(proxy, cfg)
 		*checkedProxy = append(*checkedProxy, *proxy)
 	}
