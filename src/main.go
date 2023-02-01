@@ -9,6 +9,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"runtime"
 	"time"
 
 	"golang.org/x/sync/errgroup"
@@ -48,7 +49,7 @@ func main() {
 	if cfg.SOCKS5.Enabled {
 		urlsList = append(urlsList, utils.GetUrlsList(cfg.SOCKS5.UrlListFile, proxy.SOCKS5))
 	}
-
+	runtime.GOMAXPROCS(cfg.General.MaxThreads)
 	logger.LogInfo("Scraping Proxies")
 
 	scraper.Scrape(&urlsList, &proxies, time.Duration(float64(cfg.General.Timeout)*float64(time.Second)))
