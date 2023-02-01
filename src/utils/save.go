@@ -30,7 +30,7 @@ func Save(p *proxy.Proxy, cfg *Config) error {
 
 	defer file.Close()
 
-	_, err = file.WriteString(fmt.Sprintf("%s:%s\r\n", p.Protocol, p.IP+":"+strconv.Itoa(int(p.Port))))
+	_, err = file.WriteString(fmt.Sprintf("%s\r\n", p.IP+":"+strconv.Itoa(int(p.Port))))
 
 	if err != nil {
 		log.Fatal(err)
