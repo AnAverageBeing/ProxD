@@ -2,6 +2,7 @@ package checker
 
 import (
 	"GigaCat/ProxD/proxy"
+	"GigaCat/ProxD/utils"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -13,7 +14,7 @@ type host struct {
 	Origin string `json:"origin"`
 }
 
-func CheckProxy(checkedProxy *[]proxy.Proxy, proxy *proxy.Proxy, timeout time.Duration, maxRetries int) error {
+func CheckProxy(checkedProxy *[]proxy.Proxy, proxy *proxy.Proxy, timeout time.Duration, maxRetries int, cfg *utils.Config) error {
 	var tried int
 	alive := false
 	transport, err := Configure(proxy)
@@ -55,7 +56,7 @@ func CheckProxy(checkedProxy *[]proxy.Proxy, proxy *proxy.Proxy, timeout time.Du
 		break
 	}
 
-	if tried > *&maxRetries || !alive {
+	if tried > maxRetries || !alive {
 		return nil
 	}
 
@@ -69,6 +70,7 @@ func CheckProxy(checkedProxy *[]proxy.Proxy, proxy *proxy.Proxy, timeout time.Du
 		return nil
 	}
 	if fmt.Sprintf("%s:%s", jsonData.Origin, proxyUrl.Port()) == proxyUrl.Host {
+		utils.Save(proxy, cfg)
 		*checkedProxy = append(*checkedProxy, *proxy)
 	}
 	return nil

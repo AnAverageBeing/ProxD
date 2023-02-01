@@ -62,7 +62,7 @@ func main() {
 	for _, p := range proxies {
 		p := p
 		group.Go(func() error {
-			return checker.CheckProxy(&checked, &p, time.Duration(float64(cfg.General.Timeout)*float64(time.Second)), cfg.General.MaxRetries)
+			return checker.CheckProxy(&checked, &p, time.Duration(float64(cfg.General.Timeout)*float64(time.Second)), cfg.General.MaxRetries, &cfg)
 		})
 	}
 
