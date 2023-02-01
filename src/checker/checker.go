@@ -2,11 +2,16 @@ package checker
 
 import (
 	"GigaCat/ProxD/proxy"
-	"GigaCat/ProxD/utils/logger"
+	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"time"
 )
+
+type host struct {
+	Origin string `json:"origin"`
+}
 
 func CheckProxy(checkedProxy *[]proxy.Proxy, proxy *proxy.Proxy, timeout time.Duration, maxRetries int) error {
 	var tried int
@@ -20,6 +25,8 @@ func CheckProxy(checkedProxy *[]proxy.Proxy, proxy *proxy.Proxy, timeout time.Du
 		Timeout:   timeout,
 	}
 	var reader io.ReadCloser
+	var Req *http.Request
+	var Resp *http.Response
 
 	for i := 0; maxRetries > i; i++ {
 
@@ -32,23 +39,37 @@ func CheckProxy(checkedProxy *[]proxy.Proxy, proxy *proxy.Proxy, timeout time.Du
 			continue
 		}
 
-		res, err := client.Do(req)
+		resp, err := client.Do(req)
 
 		if err != nil {
 			tried++
 			continue
 		}
 
-		defer res.Body.Close()
+		defer resp.Body.Close()
+
 		alive = true
+		Req = req
+		Resp = resp
+
 		break
 	}
 
-	if alive {
-		*checkedProxy = append(*checkedProxy, *proxy)
-		logger.LogProxy(proxy)
+	if tried > *&maxRetries || !alive {
 		return nil
 	}
 
+	var jsonData host
+	err = json.NewDecoder(Resp.Body).Decode(&jsonData)
+	if err != nil {
+		return nil
+	}
+	proxyUrl, err := transport.Proxy(Req)
+	if err != nil {
+		return nil
+	}
+	if fmt.Sprintf("%s:%s", jsonData.Origin, proxyUrl.Port()) == proxyUrl.Host {
+		*checkedProxy = append(*checkedProxy, *proxy)
+	}
 	return nil
 }
