@@ -1,5 +1,14 @@
 package checker
 
+/*
+*
+*   Author       ->  AnAverageBeing
+*   License      ->  GNU
+*   Discord      ->  GigaCat#1521
+*   Description  ->  Blazingly fast proxy utility tool
+*
+ */
+
 import (
 	"GigaCat/ProxD/proxy"
 	"crypto/tls"

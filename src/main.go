@@ -49,6 +49,12 @@ func main() {
 	if cfg.SOCKS5.Enabled {
 		urlsList = append(urlsList, utils.GetUrlsList(cfg.SOCKS5.UrlListFile, proxy.SOCKS5))
 	}
+
+	err = utils.Trunc(&cfg)
+	if err != nil {
+		logger.LogErr(err)
+	}
+
 	runtime.GOMAXPROCS(cfg.General.MaxThreads)
 	logger.LogInfo("Scraping Proxies")
 
