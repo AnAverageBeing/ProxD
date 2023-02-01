@@ -31,6 +31,7 @@ var proxies = make([]proxy.Proxy, 1000)
 func main() {
 
 	flag.Parse()
+	utils.PrintLogo()
 	cfg, err := utils.GetConfig(configFile)
 	if err != nil {
 		log.Fatal(err)
@@ -47,6 +48,8 @@ func main() {
 	if cfg.SOCKS5.Enabled {
 		urlsList = append(urlsList, utils.GetUrlsList(cfg.SOCKS5.UrlListFile, proxy.SOCKS5))
 	}
+
+	logger.LogInfo("Scraping Proxies")
 
 	scraper.Scrape(&urlsList, &proxies, time.Duration(float64(cfg.General.Timeout)*float64(time.Second)))
 
