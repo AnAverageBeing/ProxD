@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/gocolly/colly v1.2.0
 	github.com/jwalton/gchalk v1.3.0
+	golang.org/x/sync v0.1.0
 	gopkg.in/gcfg.v1 v1.2.3
 )
 

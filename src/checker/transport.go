@@ -1,0 +1,26 @@
+package checker
+
+import (
+	"GigaCat/ProxD/proxy"
+	"crypto/tls"
+	"fmt"
+	"net/http"
+	"net/url"
+	"strconv"
+)
+
+func Configure(proxy *proxy.Proxy) (*http.Transport, error) {
+	proxyUrl, err := url.Parse(fmt.Sprintf("%s://%s", proxy.Protocol, proxy.IP+":"+strconv.Itoa(int(proxy.Port))))
+	if err != nil {
+		return nil, err
+	}
+	transport := &http.Transport{
+		Proxy:             http.ProxyURL(proxyUrl),
+		ForceAttemptHTTP2: true,
+		TLSClientConfig: &tls.Config{
+			InsecureSkipVerify: true,
+		},
+	}
+
+	return transport, nil
+}

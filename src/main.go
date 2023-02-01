@@ -1,6 +1,7 @@
 package main
 
 import (
+	"GigaCat/ProxD/checker"
 	"GigaCat/ProxD/proxy"
 	"GigaCat/ProxD/scraper"
 	"GigaCat/ProxD/utils"
@@ -9,6 +10,8 @@ import (
 	"fmt"
 	"log"
 	"time"
+
+	"golang.org/x/sync/errgroup"
 )
 
 /*
@@ -50,4 +53,18 @@ func main() {
 	proxies = utils.RemoveDuplicates(&proxies)
 
 	logger.LogInfo(fmt.Sprintf("Scraped %d proxies", len(proxies)))
+	logger.LogInfo("Checking Proxies")
+
+	checked := make([]proxy.Proxy, 1000)
+
+	group := new(errgroup.Group)
+	group.SetLimit(-1)
+	for _, p := range proxies {
+		p := p
+		group.Go(func() error {
+			return checker.CheckProxy(&checked, &p, time.Duration(float64(cfg.General.Timeout)*float64(time.Second)), cfg.General.MaxRetries)
+		})
+	}
+
+	group.Wait()
 }

@@ -19,6 +19,7 @@ type Config struct {
 		SourceTimeout int
 		MaxThreads    int
 		CheckWebsite  string
+		MaxRetries    int
 	}
 	HTTP struct {
 		Enabled     bool
