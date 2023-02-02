@@ -35,16 +35,14 @@ func CheckProxy(checkedProxy *[]proxy.Proxy, proxy *proxy.Proxy, timeout time.Du
 
 	for tried := 0; maxRetries > tried; tried++ {
 
-		response, err := client.Get(checkSite)
+		_, err := client.Get(checkSite)
 
 		if err != nil {
 			continue
 		}
 
-		if response.StatusCode == 200 {
-			alive = true
-			break
-		}
+		alive = true
+		break
 	}
 
 	if !alive {
