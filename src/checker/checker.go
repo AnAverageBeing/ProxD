@@ -22,7 +22,7 @@ func CheckProxy(checkedProxy *[]proxy.Proxy, proxy *proxy.Proxy, timeout time.Du
 	alive := false
 	checkSite := cfg.General.CheckWebsite
 
-	transport, err := Configure(proxy, timeout)
+	transport, err := Configure(proxy)
 
 	if err != nil {
 		return nil
