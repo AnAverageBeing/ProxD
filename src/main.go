@@ -7,6 +7,7 @@ import (
 	"GigaCat/ProxD/utils"
 	"GigaCat/ProxD/utils/logger"
 	"flag"
+	"fmt"
 	"log"
 	"time"
 
@@ -62,7 +63,7 @@ func main() {
 	scraper.Scrape(&urlsList, &proxies, time.Duration(float64(cfg.General.Timeout)*float64(time.Second)))
 
 	proxies = utils.RemoveDuplicates(&proxies)
-
+	logger.LogInfo(fmt.Sprintf("Scraped %d proxies", len(proxies)))
 	logger.LogInfo("Checking Proxies")
 
 	checked := make([]proxy.Proxy, 1000)
