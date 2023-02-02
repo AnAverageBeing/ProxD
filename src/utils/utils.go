@@ -15,6 +15,8 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
+	"strings"
 )
 
 func GetUrlsList(fileLocation string, protocol proxy.ProxyProtocol) proxy.UrlsList {
@@ -36,6 +38,37 @@ func GetUrlsList(fileLocation string, protocol proxy.ProxyProtocol) proxy.UrlsLi
 		Protocol: protocol,
 	}
 	return urlsList
+}
+
+func GetFromFile(protocol proxy.ProxyProtocol, fileLocation string) (proxies []proxy.Proxy) {
+	file, err := os.Open(fileLocation)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		// split the line by ":"
+		parts := strings.Split(line, ":")
+		if len(parts) != 2 {
+			continue
+		}
+		ip := parts[0]
+		port, err := strconv.ParseUint(parts[1], 10, 16)
+		if err != nil {
+			continue
+		}
+
+		proxies = append(proxies, proxy.Proxy{
+			IP:       ip,
+			Port:     uint16(port),
+			Protocol: protocol,
+		})
+	}
+	return
 }
 
 func RemoveDuplicates(proxies *[]proxy.Proxy) []proxy.Proxy {

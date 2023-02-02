@@ -38,14 +38,18 @@ func main() {
 	}
 
 	urlsList := make([]proxy.UrlsList, 1)
+
 	if cfg.HTTP.Enabled {
+		proxies = append(proxies, utils.GetFromFile(proxy.HTTP, cfg.HTTP.SourcesFile)...)
 		urlsList = append(urlsList, utils.GetUrlsList(cfg.HTTP.UrlListFile, proxy.HTTP))
 	}
 	if cfg.SOCKS4.Enabled {
+		proxies = append(proxies, utils.GetFromFile(proxy.SOCKS4, cfg.SOCKS4.SourcesFile)...)
 		urlsList = append(urlsList, utils.GetUrlsList(cfg.SOCKS4.UrlListFile, proxy.SOCKS4))
 
 	}
 	if cfg.SOCKS5.Enabled {
+		proxies = append(proxies, utils.GetFromFile(proxy.SOCKS5, cfg.SOCKS5.SourcesFile)...)
 		urlsList = append(urlsList, utils.GetUrlsList(cfg.SOCKS5.UrlListFile, proxy.SOCKS5))
 	}
 
@@ -67,6 +71,7 @@ func main() {
 
 	group := new(errgroup.Group)
 	group.SetLimit(-1)
+
 	for _, p := range proxies {
 		p := p
 		group.Go(func() error {
