@@ -34,6 +34,7 @@ var (
 
 func LogProxy(proxy *proxy.Proxy) {
 	str := new(strings.Builder)
+	str.WriteString("\r")
 	str.WriteString(encloseInBrackets(workingColor))
 	str.WriteString(" ")
 	str.WriteString(formatProxyString(proxy))
