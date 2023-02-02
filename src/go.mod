@@ -28,4 +28,5 @@ require (
 	golang.org/x/text v0.6.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
+	h12.io/socks v1.0.3 // indirect
 )

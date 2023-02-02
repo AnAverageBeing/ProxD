@@ -13,88 +13,47 @@ import (
 	"GigaCat/ProxD/proxy"
 	"GigaCat/ProxD/utils"
 	"GigaCat/ProxD/utils/logger"
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
 	"net/http"
 	"time"
 )
 
-type host struct {
-	Origin string `json:"origin"`
-}
-
 func CheckProxy(checkedProxy *[]proxy.Proxy, proxy *proxy.Proxy, timeout time.Duration, maxRetries int, cfg *utils.Config) error {
-	var tried int
+
 	alive := false
-	transport, err := Configure(proxy)
+	checkSite := cfg.General.CheckWebsite
+
+	transport, err := Configure(proxy, timeout)
+
 	if err != nil {
 		return nil
 	}
+
 	client := http.Client{
 		Transport: transport,
 		Timeout:   timeout,
 	}
 
-	var req *http.Request
-	var resp *http.Response
-	var success bool
-	var body []byte
+	for tried := 0; maxRetries > tried; tried++ {
 
-	for i := 0; maxRetries > i; i++ {
+		response, err := client.Get(checkSite)
 
-		if tried > maxRetries || alive {
+		if err != nil {
+			continue
+		}
+
+		if response.StatusCode == 200 {
+			alive = true
 			break
 		}
-		req, err = http.NewRequest("GET", "https://httpbin.org/ip", nil)
-		if err != nil {
-			tried++
-			continue
-		}
-
-		resp, success, err = doRequest(client, req)
-		if err != nil || !success {
-			tried++
-			continue
-		}
-
-		alive = true
-		break
 	}
 
-	if tried > maxRetries || !alive {
+	if !alive {
 		return nil
 	}
 
-	var jsonData host
-	body, err = ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return err
-	}
-	err = json.Unmarshal(body, &jsonData)
-	if err != nil {
-		return err
-	}
-	proxyUrl, err := transport.Proxy(req)
-	if err != nil {
-		return err
-	}
-	if fmt.Sprintf("%s:%s", jsonData.Origin, proxyUrl.Port()) == proxyUrl.Host {
-		logger.LogProxy(proxy)
-		utils.Save(proxy, cfg)
-		*checkedProxy = append(*checkedProxy, *proxy)
-	}
-	return nil
-}
+	logger.LogProxy(proxy)
+	utils.Save(proxy, cfg)
+	*checkedProxy = append(*checkedProxy, *proxy)
 
-func doRequest(client http.Client, req *http.Request) (*http.Response, bool, error) {
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, false, err
-	}
-	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-		return resp, true, nil
-	}
-	resp.Body.Close()
-	return nil, false, nil
+	return nil
 }
