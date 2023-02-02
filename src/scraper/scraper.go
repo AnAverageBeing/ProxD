@@ -60,7 +60,10 @@ func scrapeURL(urls []string, protocol proxy.ProxyProtocol, proxies *[]proxy.Pro
 	var urlsWg sync.WaitGroup
 	for _, url := range urls {
 		urlsWg.Add(1)
-		go c.Visit(url)
+		go func(url string) {
+			c.Visit(url)
+			urlsWg.Done()
+		}(url)
 	}
 	urlsWg.Wait()
 }
