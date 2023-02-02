@@ -11,7 +11,6 @@ package scraper
 
 import (
 	"GigaCat/ProxD/proxy"
-	"GigaCat/ProxD/utils/logger"
 	"regexp"
 	"strconv"
 	"strings"
@@ -61,13 +60,7 @@ func scrapeURL(urls []string, protocol proxy.ProxyProtocol, proxies *[]proxy.Pro
 	var urlsWg sync.WaitGroup
 	for _, url := range urls {
 		urlsWg.Add(1)
-		go func(url string) {
-			err := c.Visit(url)
-			if err != nil {
-				logger.LogErr(err)
-			}
-			urlsWg.Done()
-		}(url)
+		go c.Visit(url)
 	}
 	urlsWg.Wait()
 }
