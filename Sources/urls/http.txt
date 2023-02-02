@@ -49,4 +49,3 @@ https://spys.me/proxy.txt
 https://www.freeproxychecker.com/result/http_proxies.txt
 https://www.proxy-list.download/api/v1/get?type=http
 https://www.proxy-list.download/api/v1/get?type=https
-https://raw.githubusercontent.com/AnAverageBeing/proxies/main/http-to-check.txt

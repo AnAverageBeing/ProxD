@@ -23,4 +23,3 @@ https://raw.githubusercontent.com/zevtyardt/proxy-list/main/socks4.txt
 https://spys.me/socks.txt
 https://www.freeproxychecker.com/result/socks4_proxies.txt
 https://www.proxy-list.download/api/v1/get?type=socks4
-https://raw.githubusercontent.com/AnAverageBeing/proxies/main/socks4-to-check.txt
