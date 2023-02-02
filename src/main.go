@@ -7,7 +7,6 @@ import (
 	"GigaCat/ProxD/utils"
 	"GigaCat/ProxD/utils/logger"
 	"flag"
-	"fmt"
 	"log"
 	"runtime"
 	"time"
@@ -62,7 +61,6 @@ func main() {
 
 	proxies = utils.RemoveDuplicates(&proxies)
 
-	logger.LogInfo(fmt.Sprintf("Scraped %d proxies", len(proxies)))
 	logger.LogInfo("Checking Proxies")
 
 	checked := make([]proxy.Proxy, 1000)
