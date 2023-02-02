@@ -18,7 +18,6 @@ type Config struct {
 		Timeout       int
 		SourceTimeout int
 		MaxThreads    int
-		CheckWebsite  string
 		MaxRetries    int
 	}
 	HTTP struct {
