@@ -15,11 +15,11 @@ import (
 
 type Config struct {
 	General struct {
-		Timeout       int
-		SourceTimeout int
-		MaxThreads    int
-		CheckWebsite  string
-		MaxRetries    int
+		Timeout        int
+		SourceTimeout  int
+		MaxConnections int
+		CheckWebsite   string
+		MaxRetries     int
 	}
 	HTTP struct {
 		Enabled     bool

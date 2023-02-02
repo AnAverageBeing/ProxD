@@ -7,6 +7,7 @@ require (
 	github.com/jwalton/gchalk v1.3.0
 	golang.org/x/sync v0.1.0
 	gopkg.in/gcfg.v1 v1.2.3
+	h12.io/socks v1.0.3
 )
 
 require (
@@ -28,5 +29,4 @@ require (
 	golang.org/x/text v0.6.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
-	h12.io/socks v1.0.3 // indirect
 )

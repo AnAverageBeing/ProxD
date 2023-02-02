@@ -8,7 +8,6 @@ import (
 	"GigaCat/ProxD/utils/logger"
 	"flag"
 	"log"
-	"runtime"
 	"time"
 
 	"golang.org/x/sync/errgroup"
@@ -58,7 +57,6 @@ func main() {
 		logger.LogErr(err)
 	}
 
-	runtime.GOMAXPROCS(cfg.General.MaxThreads)
 	logger.LogInfo("Scraping Proxies")
 
 	scraper.Scrape(&urlsList, &proxies, time.Duration(float64(cfg.General.Timeout)*float64(time.Second)))
@@ -70,7 +68,7 @@ func main() {
 	checked := make([]proxy.Proxy, 1000)
 
 	group := new(errgroup.Group)
-	group.SetLimit(-1)
+	group.SetLimit(cfg.General.MaxConnections)
 
 	for _, p := range proxies {
 		p := p
