@@ -32,12 +32,12 @@ var (
 	proxyPrefix  = gchalk.WithAnsi256(171).Bold("PROXY ")
 )
 
-func LogProxy(proxy *proxy.Proxy) {
+func LogProxy(proxy *proxy.Proxy, tries int) {
 	str := new(strings.Builder)
 	str.WriteString("\r")
 	str.WriteString(encloseInBrackets(workingColor))
 	str.WriteString(" ")
-	str.WriteString(formatProxyString(proxy))
+	str.WriteString(formatProxyString(proxy, tries))
 	fmt.Println(str.String())
 }
 
@@ -63,10 +63,11 @@ func encloseInBrackets(str string) string {
 	return lb + str + rb
 }
 
-func formatProxyString(proxy *proxy.Proxy) string {
+func formatProxyString(proxy *proxy.Proxy, tries int) string {
 	str := new(strings.Builder)
 	str.WriteString(proxyPrefix)
 	str.WriteString(gchalk.WithWhite().Bold(" -> "))
+	str.WriteString(encloseInBrackets(fmt.Sprintf("%d", tries)))
 	str.WriteString(gchalk.WithAnsi256(206).Bold(" { "))
 	str.WriteString(gchalk.Ansi256(195)(fmt.Sprintf("%s:%d", proxy.IP, proxy.Port)))
 	str.WriteString(gchalk.WithWhite().Bold(" , "))

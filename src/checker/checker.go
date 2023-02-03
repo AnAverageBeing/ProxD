@@ -32,26 +32,26 @@ func CheckProxy(checkedProxy *[]proxy.Proxy, proxy *proxy.Proxy, timeout time.Du
 		Transport: transport,
 		Timeout:   timeout,
 	}
+	var tried int
+	for tried = 1; tried < maxRetries+1; tried++ {
 
-	for tried := 0; maxRetries > tried; tried++ {
-
-		_, err := client.Get(checkSite)
-
+		resp, err := client.Get(checkSite)
 		if err != nil {
 			continue
 		}
 
-		alive = true
-		break
+		if resp.StatusCode == 200 {
+			defer resp.Body.Close()
+			alive = true
+			break
+		}
 	}
 
-	if !alive {
-		return nil
+	if alive {
+		logger.LogProxy(proxy, tried)
+		utils.Save(proxy, cfg)
+		*checkedProxy = append(*checkedProxy, *proxy)
 	}
-
-	logger.LogProxy(proxy)
-	utils.Save(proxy, cfg)
-	*checkedProxy = append(*checkedProxy, *proxy)
 
 	return nil
 }
