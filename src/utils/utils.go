@@ -71,7 +71,7 @@ func GetFromFile(protocol proxy.ProxyProtocol, fileLocation string) (proxies []p
 	return
 }
 
-func RemoveDuplicates(proxies *[]proxy.Proxy) []proxy.Proxy {
+func RemoveDuplicates(proxies *[]proxy.Proxy) {
 	keys := make(map[string]bool)
 	list := []proxy.Proxy{}
 	for _, proxy := range *proxies {
@@ -81,5 +81,5 @@ func RemoveDuplicates(proxies *[]proxy.Proxy) []proxy.Proxy {
 			list = append(list, proxy)
 		}
 	}
-	return list
+	*proxies = list
 }

@@ -9,7 +9,6 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"math/rand"
 	"time"
 
 	"golang.org/x/sync/errgroup"
@@ -27,7 +26,9 @@ import (
 var (
 	configFile = flag.String("config", "config.ini", "Location of the configuration file. Default is config.ini")
 )
-var proxies = make([]proxy.Proxy, 1000)
+var proxies = make([]proxy.Proxy, 0, 1000)
+var checked = make([]proxy.Proxy, 0, 1000)
+var urlsList = make([]proxy.UrlsList, 0, 3)
 
 func main() {
 
@@ -37,8 +38,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	urlsList := make([]proxy.UrlsList, 1)
 
 	if cfg.HTTP.Enabled {
 		proxies = append(proxies, utils.GetFromFile(proxy.HTTP, cfg.HTTP.SourcesFile)...)
@@ -63,15 +62,10 @@ func main() {
 
 	scraper.Scrape(&urlsList, &proxies, time.Duration(float64(cfg.General.Timeout)*float64(time.Second)))
 
-	proxies = utils.RemoveDuplicates(&proxies)
-	rand.Seed(time.Now().UnixNano())
-	rand.Shuffle(len(proxies), func(i, j int) {
-		proxies[i], proxies[j] = proxies[j], proxies[i]
-	})
+	utils.RemoveDuplicates(&proxies)
+
 	logger.LogInfo(fmt.Sprintf("Scraped %d proxies", len(proxies)))
 	logger.LogInfo("Checking Proxies")
-
-	checked := make([]proxy.Proxy, 1000)
 
 	group := new(errgroup.Group)
 	group.SetLimit(cfg.General.MaxConnections)
