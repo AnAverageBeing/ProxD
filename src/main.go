@@ -9,6 +9,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math/rand"
 	"time"
 
 	"golang.org/x/sync/errgroup"
@@ -63,6 +64,10 @@ func main() {
 	scraper.Scrape(&urlsList, &proxies, time.Duration(float64(cfg.General.Timeout)*float64(time.Second)))
 
 	proxies = utils.RemoveDuplicates(&proxies)
+	rand.Seed(time.Now().UnixNano())
+	rand.Shuffle(len(proxies), func(i, j int) {
+		proxies[i], proxies[j] = proxies[j], proxies[i]
+	})
 	logger.LogInfo(fmt.Sprintf("Scraped %d proxies", len(proxies)))
 	logger.LogInfo("Checking Proxies")
 
