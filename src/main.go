@@ -11,6 +11,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/schollz/progressbar/v3"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -70,9 +71,12 @@ func main() {
 	group := new(errgroup.Group)
 	group.SetLimit(cfg.General.MaxConnections)
 
+	bar := progressbar.Default(int64(len(proxies)))
+
 	for _, p := range proxies {
 		p := p
 		group.Go(func() error {
+			bar.Add(1)
 			return checker.CheckProxy(&checked, &p, time.Duration(float64(cfg.General.Timeout)*float64(time.Second)), cfg.General.MaxRetries, &cfg)
 		})
 	}
