@@ -61,7 +61,7 @@ func main() {
 
 	logger.LogInfo("Scraping Proxies")
 
-	scraper.Scrape(&urlsList, &proxies, time.Duration(float64(cfg.General.Timeout)*float64(time.Second)))
+	scraper.Scrape(&urlsList, &proxies, time.Duration(float64(cfg.General.SourceTimeout)*float64(time.Second)))
 
 	utils.RemoveDuplicates(&proxies)
 

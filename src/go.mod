@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/gocolly/colly v1.2.0
 	github.com/jwalton/gchalk v1.3.0
+	github.com/schollz/progressbar/v3 v3.13.0
 	golang.org/x/sync v0.1.0
 	gopkg.in/gcfg.v1 v1.2.3
 	h12.io/socks v1.0.3
@@ -25,7 +26,6 @@ require (
 	github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db // indirect
 	github.com/rivo/uniseg v0.4.3 // indirect
 	github.com/saintfish/chardet v0.0.0-20230101081208-5e3ef4b5456d // indirect
-	github.com/schollz/progressbar/v3 v3.13.0 // indirect
 	github.com/temoto/robotstxt v1.1.2 // indirect
 	golang.org/x/net v0.5.0 // indirect
 	golang.org/x/sys v0.5.0 // indirect
