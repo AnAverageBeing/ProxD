@@ -12,7 +12,6 @@ package checker
 import (
 	"GigaCat/ProxD/proxy"
 	"GigaCat/ProxD/utils"
-	"GigaCat/ProxD/utils/logger"
 	"net/http"
 	"time"
 )
@@ -48,7 +47,7 @@ func CheckProxy(checkedProxy *[]proxy.Proxy, proxy *proxy.Proxy, timeout time.Du
 	}
 
 	if alive {
-		logger.LogProxy(proxy, tried)
+		// logger.LogProxy(proxy, tried)
 		utils.Save(proxy, cfg)
 		*checkedProxy = append(*checkedProxy, *proxy)
 	}
